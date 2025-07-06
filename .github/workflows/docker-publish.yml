@@ -21,7 +21,7 @@ jobs:
 
       - name: Check DockerHub user secret
         run: |
-          if [ -z "${{ secrets.DOCKERHUB_USER }}" ]; then
+          if [ -z "${{ env.DOCKERHUB_USER }}" ]; then
             echo "❌ DOCKERHUB_USER is not set!"
             exit 1
           else
