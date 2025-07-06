@@ -21,7 +21,7 @@ jobs:
 
       - name: Check DockerHub user
         run:
-          echo "DockerHub User: ${{ DOCKERHUB_USER }}"
+          echo $DOCKERHUB_USER
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
