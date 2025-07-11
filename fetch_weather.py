@@ -28,7 +28,6 @@ def fetch_weather():
 
     data = response.json()
 
-    Path("/data/history").mkdir(parents=True, exist_ok=True)
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     history_path = f"/data/history_weather/weather_{timestamp}.json"
     latest_path = "/data/weather_latest.json"
@@ -53,7 +52,14 @@ def fetch_pollution():
     lat = "31.2222"
     lon = "121.4581"
 
-    url = f"https://api.openweathermap.org/data/2.5/air_pollution/history?lat={lat}&lon={lon}&appid={api_key}"
+    # Calculate the start time (24 hours from now)
+    end_time = int(datetime.utcnow().timestamp())
+    start_time = end_time - (3600 * (24 - 1))
+
+    url = (
+        f"https://api.openweathermap.org/data/2.5/air_pollution/history"
+        f"?lat={lat}&lon={lon}&start={start_time}&end={end_time}&appid={api_key}"
+    )
 
     proxies = {
         "http": http_proxy,
@@ -63,7 +69,6 @@ def fetch_pollution():
     response = requests.get(url, proxies=proxies, timeout=20)
     response.raise_for_status()
 
-    Path("/data/history").mkdir(parents=True, exist_ok=True)
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     history_path = f"/data/history_pollution/pollution_{timestamp}.json"
     latest_path = "/data/pollution_latest.json"
